@@ -1,0 +1,114 @@
+---
+title: "Abiotic and Biotic Factors that Influence Phytoplankton Population Dyanmics in Coastal New Hampshire"
+author: "Molly Erickson and Tiffany Winter"
+date: "11/15/2021"
+output:
+  pdf_document: default
+  word_document: default
+bibliography: references.bib
+---
+
+```{r setup, include= FALSE}
+knitr::opts_chunk$set(echo = FALSE, warning =  FALSE)
+
+library(ggplot2)
+library(tinytex)
+library(readr)
+library(bibtex)
+
+Silica <- read.csv("D:/R/Thesis_Data/SiO2.csv")
+Tide <- read.csv("D:/R/Thesis_Data/tide.csv")
+colnames(Tide) <- c('Date', 'TideHeight', 'Site')
+Salinity <- read.csv("D:/R/Thesis_Data/sali.csv")
+colnames(Salinity) <- c('Date', 'Salinity', 'Site')
+Temp <- read.csv("D:/R/Thesis_Data/temp.csv")
+colnames(Temp) <- c('Date', 'Temp', 'Site')
+Chl <- read.csv("D:/R/Thesis_Data/chlorophyllaconc.csv")
+tchl <- read.csv("D:/R/Thesis_Data/tchl.csv")
+
+```
+
+# Background
+
+  Phytoplankton provide structure to marine ecosystems as primary producers and contributors to biogeochemical nutrient cycling [@Field_1998]. Changes in phytoplankton populations such as blooms can create dead zones, affect primary productivity, fisheries management, and carbon sequestration. To address this, governments worldwide monitor their local marine ecosystems and scientists work on creating mathematical models to determine when and where blooms will potentially occur. To do this we must understand phytoplankton population dynamics and the biotic and abiotic factors that affect them. This allows us to create improved ecosystem models so we can mitigate the effect of phytoplankton blooms on the environment and economy.
+  Predicting phytoplankton population dynamics is complex due to the variety of factors that influence them. These factors include temperature, salinity, changes in tides, location, biogeochemical nutrient cycling, and predator-prey interactions. Therefore, correlating one particular factor with influencing phytoplankton population dynamics from a single observation is exceedingly difficult. Time series are an extremely valuable tool to evaluate the factors that drive changes in ecosystem structure. Weekly sampling over the course of a year can provide valuable information on how these factors affect population abundance and which are most influential [@Cloern_2009]. This information allows us to create more robust mathematical models which are used to predict future trends in population dynamics, and thus, overall ecosystem health. Analyzing the temporal variations in coastal New Hampshire can help evaluate the natural and anthropogenic influences present in these areas and what areas are most affected.
+  Despite the importance of a phytoplankton time series, there is a lack of information regarding phytoplankton variability in coastal NH. In the past, changes in chlorophyll a concentrations were recorded over time at various sites to determine overall phytoplankton abundance. However, the data was not collected at a weekly frequency and did not characterize the community composition of phytoplankton populations [@Jones_2000; Short_1992]. It is imperative that New Hampshire’s coastal phytoplankton populations are studied as they are an essential component of ecosystems throughout the Gulf of Maine, which is one of the most diverse, yet vulnerable, marine environments in the world. The Gulf of Maine’s estuaries and coastal zones in particular are profoundly impacted by temporal variations and can provide an adequate representation of changes in phytoplankton population dynamics [@Eppley_1972]. By performing an annual time series measuring phytoplankton biodiversity and oceanographic factors, a baseline of information can be provided to aid in the development of ecosystem models for the Gulf of Maine. 
+ 
+
+# Methods
+
+  Whole seawater was collected at peak high tide from two locations, the coastal zone of North Beach in Hampton, New Hampshire, (42.9268659, -70.7983751) and the Jackson Estuarine Laboratory (JEL)  in Durham, New Hampshire (43.0920913, -70.8644661), weekly from October 2020 through November 2021. During each sampling, a 5.0-liter carboy was filled with surface (1 m) seawater, and kept out of direct sunlight for transport back to the laboratory for analysis (less than 1 hour between sampling and processing). Temperature was taken with a thermometer, and salinity was determined using a refractometer. Tide height was obtained from US Harbors tide charts. 
+
+## Chlorophyll Concentration
+ 
+  Weekly at each location, triplicate chlorophyll samples were analyzed. For each sample, approximately 100-300 mL of seawater was gently filtered through 25 mm glass fiber filters (GFF), using a filtration manifold. The filters were placed into tinfoil-covered tubes containing 5 ml 100% ethanol to extract at room temperature, in the dark for ~12 hours. After vortexing and removing the filters, the chlorophyll a fluorescence in each tube was read on an AquaFluor fluorometer. Fluorescence values obtained by the AquaFluor were converted into chlorophyll concentrations (µg L-1) using a standard curve generated by purchased chlorophyll standards. 
+
+## Nutrient Composition
+
+  From each location, 80 ml of seawater was filtered through a 0.22 µm polycarbonate filter into a 125 ml sampling bottle. These samples were frozen and further analyzed at the UNH Water Quality Analysis Laboratory for nitrate/nitrite, nitrite, ammonia, phosphate, and silica.
+
+## R Analysis
+
+  The data sets for temperature, tide height, salinity, chlorophyll a concentration, and silica concentration were exported into a .csv file and imported into R software for graphical analysis. The package ggplot2 was used to develop figures representing the fluctuations of the factors in the aforementioned data sets over time. The function as.Date was used to transform values into dates for the figures. The figures were developed comparing values between the two sampling locations for each data set. 
+  
+# Results
+
+```{r, fig.cap= "SiO2 concentration at North Beach and Jackson Estuarine Laboratory" }
+
+Silica$Date= as.Date(Silica$Date, format = "%m/%d/%Y")
+ggplot(data = Silica, aes(x=Date,y=Silica, color=Site)) + geom_line() + 
+  labs(x= "Date", y= "Silica (mg SiO2/L)") 
+
+```
+
+```{r, fig.cap= "Tide Height at North Beach and Jackson Estuarine Laboratory" }
+Silica$Date= as.Date(Silica$Date, format = "%m/%d/%Y")
+Tide$Date= as.Date(Tide$Date, format = "%m/%d/%Y")
+ggplot(data = Tide, aes(x=Date,y=TideHeight, color=Site)) + geom_line() + 
+  labs(x= "Date", y= "Tide Height (ft)") 
+```
+
+```{r, fig.cap= "Salinity at North Beach and Jackson Estuarine Laboratory" }
+
+Salinity$Date= as.Date(Salinity$Date, format = "%m/%d/%Y")
+ggplot(data = Salinity, aes(x=Date,y=Salinity, color=Site)) + geom_line() + 
+  labs(x= "Date", y= "Salinity (ppt)") 
+```
+
+```{r, fig.cap= "Temperature at North Beach and Jackson Estuarine Laboratory" }
+
+Temp$Date= as.Date(Temp$Date, format = "%m/%d/%Y")
+ggplot(data = Temp, aes(x=Date,y=Temp, color=Site)) + geom_line() + 
+  labs(x= "Date", y= "Temperature (°C)") 
+```
+
+```{r, fig.cap= "Chlorophyll a Concentration at North Beach and Jackson Estuarine Laboratory" }
+
+Chl$Date= as.Date(Chl$Date, format = "%m/%d/%Y")
+ggplot(data = Chl, aes(x=Date,y=Chloro, color=Site)) + geom_line() + 
+  labs(x= "Date", y= "Chlorophyll a Concentration (ug Chl a/L)") 
+```
+
+
+```{r, fig.cap= "Chlorophyll a Concentration vs Temperature at North Beach and Jackson Estuarine Laboratory" }
+
+ggplot(data = tchl, aes(x=Temp,y=Chloro, color=Site)) + geom_line() + 
+  labs(x= "Temperature (°C)", y= "Chlorophyll a Concentration (ug Chl a/L)") 
+```
+
+
+\pagebreak
+
+Fluctuation of temperature, tide height, salinity, chlorophyll a concentration, and silica were highly varied at both locations and throughout the year. Silica was found to be higher at North Beach than at JEL, which indicates that there is a higher concentration of diatom populations in that area (Figure 1). Diatoms utilize silica to develop their protective frustules, and therefore their populations are abundant when silica levels are high. North Beach also had a higher tide height on average than JEL (Figure 2). As a purely marine habitat on the coast of the open ocean, North Beach is bound to have higher tides than an enclosed estuary such as Great Bay. Salinity was consistently higher at North Beach due to the ocean having a higher salt content than brackish estuaries which have an influx of freshwater from rivers combining with saline marine waters (Figure 3). No distinct temperature fluctuations were found between the two sampling sites, with temperatures decreasing to approximately 1°C in the winter and increasing to 20.5°C in late summer (Figure 4). Chlorophyll a concentrations were highly variable at both locations with peaks representing phytoplankton blooms (Figure 5). Phytoplankton have a variety of photosynthetic pigments in them such as chlorophyll a, therefore, if chlorophyll a concentrations are high in a water sample, that indicates there are a lot of phytoplankton present.  
+
+# Discussion
+
+  While changes in the studied factors were highly varied at both locations, this can be anticipated as the ocean is a profoundly variable ecosystem that fluctuates in all parameters on a daily basis. There was no substantial variation in temperature between the two sites, but salinity and tide height were both higher at North Beach compared to JEL. This is expected as the North Beach sampling location is a coastal region whereas JEL is inland in the Great Bay Estuary. The estuary being naturally brackish consists of freshwater from rivers mixing with saltwater from the ocean, ultimately causing salinity to be lower. Estuaries are also more inland than the coast, and are therefore less affected by ocean currents and ultimately, high tide. 
+  Although the silica data is incomplete due to the necessity for further analysis, for the few months of data silica was relatively higher at North Beach than at JEL, indicating that more diatoms were present. High quantities of silica can lead to blooms of diatoms which can be an issue depending on the species. Recently, the Gulf of Maine has been plagued by annual blooms of Pseudo-nitzschia [@Cloern_2009]. This diatom is a harmful algal blooms species that produces domoic acid and can cause amnesic shellfish poisoning along with economical and environmental complications when it blooms. 
+  Chlorophyll a concentrations had the highest amount of variation between the two sites. Qualitatively, the figure displays a trend that when one site has a high concentration the other has a low concentration, oscillating between the two sampling sites. This oscillating pattern shows a lag where there is a peak at North Beach, followed just a few weeks later at JEL, and so on. This could potentially be due to different species of phytoplankton traveling along the coast through the water column and blooming. 
+	While this research only scratches the surface of factors that impact phytoplankton communities, it provides a significant baseline to understand this community as a whole in the Gulf of Maine. Phytoplankton are extremely important contributors to the structure of the marine food web and are indicators of environmental health. As the presence of climate change is growing increasingly stronger, significant alterations to the marine food web, species health, and nutrient cycling are occurring, particularly in vulnerable areas such as coastal and estuarine habitats. This research can provide many benefits such as assisting in the creation of more accurate predictive models that will in turn aid in decreasing the economic impact of blooms. Concurrently, discerning fluctuations can contribute to the success of the fisheries and aquaculture industries through providing valuable information on food web structure. Additionally, it may be possible for phytoplankton to be cultured and utilized as a food source in aquaculture and fisheries facilities [@Cresswell_2010]. In addition to the economic benefits brought about by phytoplankton, analyzing their population dynamics can also provide a valuable baseline for understanding changes in ecosystems as climate change continues to impact the Gulf of Maine.
+ 
+ 
+\pagebreak
+
+# Literature Cited:
